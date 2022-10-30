@@ -166,6 +166,14 @@ def image_filter():
 # GIF SEARCH ROUTE
 ################################################################################
 
+"""You'll be using the Tenor API for this next section. 
+Be sure to take a look at their API. 
+
+https://tenor.com/gifapi/documentation
+
+Register and make an API key for yourself. 
+Set up dotenv, create a .env file and define a variable 
+API_KEY with a value that is the api key for your account. """
 
 API_KEY = os.getenv('API_KEY')
 print(API_KEY)
@@ -195,7 +203,11 @@ def gif_search():
             'gifs': gifs
         }
 
-        # Uncomment me to see the result JSON!
+         # Uncomment me to see the result JSON!
+        # Look closely at the response! It's a list
+        # list of data. The media property contains a 
+        # list of media objects. Get the gif and use it's 
+        # url in your template to display the gif. 
         # pp.pprint(gifs)
 
         return render_template('gif_search.html', **context)
