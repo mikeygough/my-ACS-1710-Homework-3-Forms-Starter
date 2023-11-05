@@ -12,13 +12,22 @@ Animal Facts
 
         <label>
             Which animal(s) do you want facts on?
-
-            <select name="animal" multiple style="height: 110px; width: 120px;">
+            <select name="animal" multiple style="width: 120px;>
             {% for animal in animal_list %}
                 <option value="{{ animal }}">{{ animal }}</option>
             {% endfor %}
             </select>
         </label>
+
+        <br><br>
+        What category of animal fact?
+        <input type="radio" name="fact_category" value="habitat">
+        <label for="fact_category">Habitat</label>
+        <input type="radio" name="fact_category" value="physical_characteristics">
+        <label for="fact_category">Physical Characteristics</label>
+        <input type="radio" name="fact_category" value="intelligence">
+        <label for="fact_category">Intelligence</label>
+        <br><br>
 
         <input type="submit" value="Get Fact!">
     </fieldset>
@@ -31,7 +40,7 @@ Animal Facts
         </p>
         {% for animal in animals_to_display %}
             <p>
-                <strong>{{ animal }}</strong><em>: {{ animal_to_fact[animal] }}</em>
+                <strong>{{ animal }}</strong><em>: {{ animal_to_fact[animal][fact_category] }}</em>
             </p>
         {% endfor %}
     </section>
