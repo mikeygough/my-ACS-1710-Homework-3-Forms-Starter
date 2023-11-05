@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageOps
 from pprint import PrettyPrinter
 from dotenv import load_dotenv
 import json
@@ -114,7 +114,6 @@ def animal_facts():
         'fact_category': fact_category
     }
 
-    # print(animal)
     return render_template('animal_facts.html', **context)
 
 
@@ -129,7 +128,11 @@ filter_types_dict = {
     'edge enhance': ImageFilter.EDGE_ENHANCE,
     'emboss': ImageFilter.EMBOSS,
     'sharpen': ImageFilter.SHARPEN,
-    'smooth': ImageFilter.SMOOTH
+    'smooth': ImageFilter.SMOOTH,
+    'grayscale': ImageOps.grayscale,
+    'solarize': ImageOps.solarize,
+    'flip': ImageOps.flip,
+    'mirror': ImageOps.mirror,
 }
 
 def save_image(image, filter_type):
@@ -149,11 +152,18 @@ def save_image(image, filter_type):
 
 
 def apply_filter(file_path, filter_name):
-    """Apply a Pillow filter to a saved image."""
+    """Apply a Pillow filter or grayscale to a saved image."""
     i = Image.open(file_path)
     i.thumbnail((500, 500))
-    i = i.filter(filter_types_dict.get(filter_name))
+    
+    # conditional depending on filter
+    if filter_name in ['blur', 'contour', 'detail', 'edge enhance', 'emboss', 'sharpen', 'smooth'] :
+        i = i.filter(filter_types_dict.get(filter_name))
+    else:
+        i = filter_types_dict.get(filter_name)(i)
+        
     i.save(file_path)
+    
 
 @app.route('/image_filter', methods=['GET', 'POST'])
 def image_filter():
@@ -162,32 +172,28 @@ def image_filter():
 
     if request.method == 'POST':
         
-        # TODO: Get the user's chosen filter type (whichever one they chose in the form) and save
-        # as a variable
-        # HINT: remember that we're working with a POST route here so which requests function would you use?
-        filter_type = ''
+        # get form value
+        filter_type = request.form['filter_type']
         
         # Get the image file submitted by the user
         image = request.files.get('users_image')
-
-        # TODO: call `save_image()` on the image & the user's chosen filter type, save the returned
-        # value as the new file path
-
-        # TODO: Call `apply_filter()` on the file path & filter type
-
+        # save the image
+        new_file_path = save_image(image, filter_type)
+        # apply the filter
+        apply_filter(new_file_path, filter_type)
         image_url = f'./static/images/{image.filename}'
 
+        # populate context
         context = {
-            # TODO: Add context variables here for:
-            # - The full list of filter types
-            # - The image URL
+            'filter_types': filter_types,
+            'image_url': image_url
         }
 
         return render_template('image_filter.html', **context)
 
     else: # if it's a GET request
         context = {
-            # TODO: Add context variable here for the full list of filter types
+            'filter_types': filter_types
         }
         return render_template('image_filter.html', **context)
 
