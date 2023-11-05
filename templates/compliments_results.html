@@ -6,13 +6,15 @@ Compliments Results
 
 {% block content %}
 
-<h1>Hi, {{ users_name }}</h1>
+<h1>Hi, {{ users_name }}!</h1>
 {% if wants_compliments == 'yes' %}
   <ul>
   {% for compliment in user_compliments %}
     <li>You are {{ compliment }}!</li>
   {% endfor %}
   </ul>
+{% else %}
+  <p>Oh... No compliments for you.
 {% endif %}
 
 {% endblock %}
