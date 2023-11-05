@@ -82,7 +82,8 @@ animal_to_fact = {
     'parrot': 'Parrots will selflessly help each other out.',
     'mantis shrimp': 'The mantis shrimp has the world\'s fastest punch.',
     'lion': 'Female lions do 90 percent of the hunting.',
-    'narwhal': 'Narwhal tusks are really an "inside out" tooth.'
+    'narwhal': 'Narwhal tusks are really an "inside out" tooth.',
+    'whale shark': 'Whale sharks are the largest shark and the largest of any fishes alive today.'
 }
 
 @app.route('/animal_facts')
@@ -90,18 +91,19 @@ def animal_facts():
     """Show a form to choose an animal and receive facts."""
 
     # get form values:
-    animal = request.args.get('animal')
+    # animals_to_display = request.args.get('animal')
+    animals_to_display = request.args.getlist('animal')
     
     # populate context
     context = {
         # TODO: Enter your context variables here for:
         'animal_to_fact': animal_to_fact,
         'animal_list': animal_to_fact.keys(),
-        'animal': animal
+        'animals_to_display': animals_to_display
     }
-    print(animal_to_fact.keys())
-    print(context['animal_list'])
-    print(animal)
+    print(animals_to_display)
+
+    # print(animal)
     return render_template('animal_facts.html', **context)
 
 

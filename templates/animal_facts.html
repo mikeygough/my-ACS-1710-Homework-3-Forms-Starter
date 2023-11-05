@@ -11,9 +11,9 @@ Animal Facts
         <legend>Your Info:</legend>
 
         <label>
-            Which animal do you want facts on?
+            Which animal(s) do you want facts on?
 
-            <select name="animal">
+            <select name="animal" multiple style="height: 110px; width: 120px;">
             {% for animal in animal_list %}
                 <option value="{{ animal }}">{{ animal }}</option>
             {% endfor %}
@@ -24,14 +24,16 @@ Animal Facts
     </fieldset>
 </form>
 
-{% if animal %}
+{% if animals_to_display %}
     <section id="form_results">
         <p>
             Here is your animal fact:
         </p>
-        <p>
-            <em>{{ animal_to_fact[animal] }}</em>
-        </p>
+        {% for animal in animals_to_display %}
+            <p>
+                <strong>{{ animal }}</strong><em>: {{ animal_to_fact[animal] }}</em>
+            </p>
+        {% endfor %}
     </section>
 {% endif %}
 
