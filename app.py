@@ -232,8 +232,6 @@ def gif_search():
             })
 
         gifs = json.loads(response.content).get('results')
-        
-        print(gifs)
 
         context = {
             'gifs': gifs
